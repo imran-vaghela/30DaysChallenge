@@ -1,0 +1,1 @@
+and just like add to the edit like i am click on edit icon then autofill the inputs and like i am update to the input inside data and update then update my new tabledata can be update ok are you understand this all 
