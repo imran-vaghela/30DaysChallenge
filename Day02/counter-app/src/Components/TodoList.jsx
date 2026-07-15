@@ -5,20 +5,36 @@ import { FaEdit, FaTrash } from "react-icons/fa";
 const Todolist = () => {
   const [task, setTask] = useState("");
   const [data, setData] = useState([]);
+  const [isedit, setIsEdit] = useState(false);
+  const [editIndex, setEditIndex] = useState(null);
 
   const submit = (e) => {
     e.preventDefault();
 
     if (task.trim() === "") return;
-    setData([...data, task]);
-    setTask("");
-    console.log(task);
-  };
-  const deleteTask=(index)=>{
-    const updateData=data.filter((item,i)=>i!==index)
-    setData(updateData)
+    if (isedit) {
+     const updateData = [...data];
+      updateData[editIndex] = task;
+      setData(updateData);
+      setIsEdit(false);
+      setEditIndex(null);
+            setTask("");
 
-  }
+    } else {
+      setData([...data, task]);
+      setTask("");
+      console.log(task);
+    }
+  };
+  const deleteTask = (index) => {
+    const updateData = data.filter((item, i) => i !== index);
+    setData(updateData);
+  };
+  const editTask = (index) => {
+    setTask(data[index]);
+    setEditIndex(index);
+    setIsEdit(true);
+  };
   return (
     <>
       <div className="todo-container">
@@ -33,7 +49,7 @@ const Todolist = () => {
             placeholder="Enter your Task"
             onChange={(e) => setTask(e.target.value)}
           />
-          <input type="submit" value="Add" />
+          <input type="submit" value={isedit ? "Update" : "Add"} />
         </form>
         <div className="todo-list">
           {data.length === 0 ? (
@@ -43,9 +59,13 @@ const Todolist = () => {
               <div className="todo-item" key={index + 1}>
                 <span>{i}</span>
                 <div className="icons">
-                  <FaEdit className="edit-icon" />
-                  <FaTrash className="delete-icon"
-                  onClick={()=>deleteTask(index)}
+                  <FaEdit
+                    className="edit-icon"
+                    onClick={() => editTask(index)}
+                  />
+                  <FaTrash
+                    className="delete-icon"
+                    onClick={() => deleteTask(index)}
                   />
                 </div>
               </div>
